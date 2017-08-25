@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<title>Coin Dispense System</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- Disable phone number detection on iOS.  -->
+<meta name="format-detection" content="telephone=no" />
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/jquery.mobile-1.4.2.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css"/>-->
+
+<!-- For minification, comment out this link -->
+<link rel="stylesheet" href="css/screen.css" />
+<!-- For minification, uncomment out this file -->
+<!--<link rel="stylesheet" href="css/screen.min.css"/>-->
+
+<!-- Set viewport scaling and zoom features -->
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery-2.0.3.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery-2.0.3.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/jquery.mobile-1.4.2.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/libs/lodash-2.4.1.js"></script>
+<!-- For minification, uncomment out this file -->
+<!--<script type="text/javascript" src="js/libs/lodash-2.4.1.min.js"></script>-->
+
+<!-- For minification, comment out this file -->
+<script type="text/javascript" src="js/app.js"></script>
+<!-- For minification, uncomment out this file -->
+<!-- <script type="text/javascript" src="js/app.min.js"></script> -->
+
+<script type="text/javascript">
+        $( document ).ready( function() {
+            //setup the app after all scripts have loaded
+
+            $(function() {
+                // Enhance the footer since it is present outside the page definition and hence not enhanced automatically.
+                $( "[data-role='footer']" ).toolbar();
+                $( "[data-role='navbar']" ).navbar();
+            });
+            // Update the contents of the toolbars
+            $( document ).on( "pageshow", "[data-role='page']", function() {
+                var current = $( this ).jqmData( "title" );
+                // Remove active class from nav buttons
+                $( "[data-role='navbar'] a.ui-btn-active" ).removeClass( "ui-btn-active" );
+                // Add active class to current nav button
+                $( "[data-role='navbar'] a" ).each(function() {
+                    if ( $( this ).text() === current ) {
+                        $( this ).addClass( "ui-btn-active" );
+                    }
+                });
+            });
+
+            //Register an event listener on the submit action
+            $('#log').submit(function(event) {
+                event.preventDefault();                
+                var userData = $(this).serializeObject();
+                loginUser(userData);
+            });
+            $('#dis').submit(function(event){
+				event.preventDefault();
+				var notes =$(this).serializeObject();
+				notesBreakdown(notes)
+                });
+
+                  
+
+            //Register the cancel listener
+            $('#cancel').click(function(event) {
+                //clear input fields
+                $('#log')[0].reset();
+
+                //clear existing msgs
+                $('span.invalid').remove();
+                $('span.success').remove();
+            });
+
+            $("#reset_setss").click(function(event) {
+                console.log("reset called");
+            	window.location.href = "http://localhost:8080/CoinDispenseSystem/#Bresults";
+            	return false;
+            });
+
+            //Clear error messages on page change
+            $("#dis").on("pagebeforeshow", function(event) {
+                $("#formMsgs").empty();
+                $('span.invalid').remove();
+            });
+        });
+
+        $.fn.serializeObject = function() {
+            var o = {};
+            var a = this.serializeArray();
+            $.each(a, function() {
+                if (o[this.name]) {
+                    if (!o[this.name].push) {
+                        o[this.name] = [o[this.name]];
+                    }
+                    o[this.name].push(this.value || '');
+                } else {
+                    o[this.name] = this.value || '';
+                }
+            });
+            return o;
+        };
+    </script>
+</head>
+<body>
+	<div id="container">
+		<section>
+			<article id="intro-art" data-role="page" data-title="Home">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Cash Dispense</h3>
+					<a href="#info-aside"
+						class="ui-btn ui-btn-right ui-icon-info ui-btn-icon-notext ui-corner-all"
+						data-rel="popup" data-position-to="window">About</a>
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<!-- For now mapping bean validation constraints from server side model is a manual task -->
+						<img src="img/fnb_logo.png" class="mobileicon" />
+						<form name="log" id="log" data-ajax="false">
+							<fieldset>
+								<div class="ui-field-contain">
+									<label for="name">User Name:</label> <input type="text"
+										name="username" id="username" placeholder="User name" required
+										autofocus />
+								</div>
+								<div class="ui-field-contain">
+									<label for="password">Password:</label> <input type="password"
+										name="password" id="password" placeholder="password" required />
+								</div>
+								<div id="formMsgs"></div>
+								<div class="ui-grid-a app-responsive">
+									<div class="ui-block-a">
+										<input type="submit" id="login" value="login" data-theme="b" />
+									</div>
+									<div class="ui-block-b">
+										<input type="button" name="cancel" id="cancel" value="Reset" />
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+
+				<!-- New HTML5 aside tag -->
+				<aside id="info-aside" data-role="popup">
+					<!-- Header -->
+					<div data-role="header">
+						<h3>Cash Dispense</h3>
+						<a href="#" data-rel="back"
+							class="ui-btn ui-btn-right ui-icon-delete ui-btn-icon-notext ui-corner-all">Close</a>
+					</div>
+					<!-- /Header -->
+					<div class="ui-content" role="main">
+						<p>Learn about Coin Dispense System</p>
+					</div>
+				</aside>
+			</article>
+
+			<!-- New HTML5 article tag -->
+			<article id="dispense" data-role="page" data-title="Cash dispense">
+				<!-- Header -->
+				<div data-role="header" class="header">
+					<h3>Cash Dispense</h3>
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<!-- For now mapping bean validation constraints from server side model is a manual task -->
+						<div>Amount due:R25.50</div>
+						<form name="dis" id="dis" data-ajax="false">
+							<fieldset>
+								<label for="phoneNumber">Capture rand note denomination</label>
+								<div class="ui-field-contain">
+									<input type="number" name="notes" id="notes" pattern="\d*"
+										placeholder="R" step="0.01" required autofocus />
+								</div>
+								<div id="formMsgs"></div>
+								<div class="ui-grid-a app-responsive">
+									<div class="ui-block-a">
+										<input type="submit" id="subDis" value="Submit" data-theme="b"
+											align="middle" />
+									</div>
+								</div>
+							</fieldset>
+						</form>
+					</div>
+				</div>
+			</article>
+
+			<!-- New HTML5 article tag -->
+			<article id="Bresults" data-role="page" data-title="List Members">
+				<!-- Header -->
+				<div data-role="header" class="header" data-position="fixed">
+					<h3>Cash Dispense</h3>
+				</div>
+				<!-- /Header -->
+
+				<div class="ui-content" role="main">
+					<div class="wrap">
+						<div>Breakdown of cash to dispense is:</div>
+						<table id="member-tabless">
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody id="results">
+
+							</tbody>
+						</table>
+						<div class="ui-grid-a app-responsive">
+							<div class="ui-block-a">								
+								<input type="button" onclick="window.location.href='#dispense'" name="reset_set" id="reset_set" value="Reset" data-theme="b" />
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</article>
+
+		</section>
+	</div>
+</body>
+</html>

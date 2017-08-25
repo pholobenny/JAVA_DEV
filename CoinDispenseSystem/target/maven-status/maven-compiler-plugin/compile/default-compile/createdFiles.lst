@@ -1,0 +1,14 @@
+com/fnb/coindispensesystem/rest/JaxRsActivator.class
+com/fnb/coindispensesystem/util/Resources.class
+com/fnb/coindispensesystem/model/Member_.class
+com/fnb/coindispensesystem/rest/UserService.class
+com/fnb/coindispensesystem/data/MemberRepository.class
+com/fnb/coindispensesystem/util/JSONPRequestFilter.class
+com/fnb/coindispensesystem/data/UserRepository.class
+com/fnb/coindispensesystem/model/Users.class
+com/fnb/coindispensesystem/service/MemberRegistration.class
+com/fnb/coindispensesystem/util/JSONPRequestFilter$1$1.class
+com/fnb/coindispensesystem/model/Member.class
+com/fnb/coindispensesystem/util/JSONPRequestFilter$1.class
+com/fnb/coindispensesystem/model/Users_.class
+com/fnb/coindispensesystem/rest/MemberService.class
