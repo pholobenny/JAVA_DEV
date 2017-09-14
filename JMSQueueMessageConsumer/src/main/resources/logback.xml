@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration packagingData="true">
+
+	<property name="PRO_HOME" value="/home/svc_dev/Repos/JAVA_DEV/JMSQueueMessageConsumer/logs" />
+	<property name="USER_HOME" value="${PRO_HOME}" />
+
+	<timestamp key="bySecond" datePattern="yyyyMMdd.HHmmss" />
+<!--  
+	<appender name="FILE-ENGINE-ERROR" class="ch.qos.logback.core.FileAppender">
+		<file>${USER_HOME}/${log.name}.error</file>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+-->
+	<appender name="FILE-ENGINE" class="ch.qos.logback.core.FileAppender">
+		<!-- <file>${USER_HOME}/${log.name}-${bySecond}.log</file> -->
+		<file>${USER_HOME}/system.log</file>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+			<Pattern>%-5level %logger{36} - %msg%n</Pattern>
+		</encoder>		
+ 	</appender>
+
+	<root level="INFO">
+		<appender-ref ref="FILE-ENGINE" />
+		<appender-ref ref="STDOUT" />
+	</root>
+
+	<logger name="com.eightbitplatoon.JMSQueueMessageConsumer.MyBean" level="ALL" additivity="false">
+		<appender-ref ref="FILE-ENGINE" />		
+	</logger>
+	<logger name="com.eightbitplatoon.JMSQueueMessageConsumer" level="ALL">
+		<appender-ref ref="STDOUT" />		
+	</logger>
+
+</configuration>
