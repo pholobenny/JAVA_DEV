@@ -77,4 +77,12 @@ username: admin
 password: admin
 
 
+---------------------
+uname -i
+
+---------------
+Rmoving files from repo but keeping then in local
+git rm --cached system.log
+---------------------
+
 

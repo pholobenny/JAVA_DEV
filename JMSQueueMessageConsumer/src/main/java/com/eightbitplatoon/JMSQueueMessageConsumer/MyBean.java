@@ -7,10 +7,11 @@ import org.slf4j.LoggerFactory;
 
 public class MyBean implements Processor {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(MyBean.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(MyBean.class.getName());
+
 	@Override
-	public void process(Exchange exchange) throws Exception {
+	public final void process(final Exchange exchange) throws Exception {
 		String msg = exchange.getIn().getBody().toString();
 		LOGGER.info(msg);
-	}		
+	}
 }
