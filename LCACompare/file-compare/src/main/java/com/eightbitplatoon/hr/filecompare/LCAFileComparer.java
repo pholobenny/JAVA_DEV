@@ -18,12 +18,16 @@ import java.util.Set;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.apache.log4j.Logger;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 
 public class LCAFileComparer {
 
-	static ReportFile writer = null;
+	//static ReportFile writer = null;
+	private static AppProperties prop = new AppProperties();
+	final static Logger logger = Logger.getLogger(LCAFileComparer.class);
 
 	/***
 	 * 
@@ -35,20 +39,25 @@ public class LCAFileComparer {
 
 		LCAFileComparer comparer = new LCAFileComparer();
 		List<FileCompareResult> resultList = new ArrayList<FileCompareResult>();
-		
-		ComparerParameters params = new ComparerParameters();
-		JCommander cmd = new JCommander(params);
 
 		try {
-
-			cmd.parse(args);
-			File[] Ffiles = new File(params.getFirstFolder()).listFiles();
-			File[] Sfiles = new File(params.getSecFolder()).listFiles();
+			logger.info("************* Welcome to LCA File Comparer aplication ***************");
+			//Get folder location from the property
+			File f1 = new File(prop.readProperty("First_Folder"));
+			File f2 = new File(prop.readProperty("Second_Folder"));	
+			logger.info("Getting Folders from a config file");
+			logger.info("First Folder Path:"+f1.getAbsolutePath());
+			logger.info("Second Folder Path:"+f2.getAbsolutePath());
+			File[] Ffiles = f1.listFiles();
+			File[] Sfiles = f2.listFiles();
+			logger.info("");
+			System.out.println("Ffiles:"+ Ffiles.length);
+			System.out.println("Sfiles:"+ Sfiles.length);
 
 			Set fileset1 = new LinkedHashSet();
 			for (int x = 0; x < Ffiles.length; x++) {
 				fileset1.add(Ffiles[x].getName());
-				System.out.println("\n********************** : " + Ffiles[x].getName());
+				//System.out.println("\n********************** : " + Ffiles[x].getName());
 			}
 
 			Set fileset2 = new LinkedHashSet();
@@ -62,20 +71,17 @@ public class LCAFileComparer {
 				result = null;
 				String filetoCompare = (String) i.next();
 				if (!fileset2.contains(filetoCompare)) {
-
-					System.out.println("This file is not in the second folder : " + filetoCompare);
-
+					logger.error("This file is not in the second folder : " + filetoCompare);
 					continue;
-
 				} else {
-					System.out.println("\n\nThis files is in the second folder : " + filetoCompare);
+					//System.out.println("\n\nThis files is in the second folder : " + filetoCompare);
+					
+					final ZipFile fFile = new ZipFile(f1.getAbsolutePath() + "/" + filetoCompare);
+					final ZipFile sFile = new ZipFile(f2.getAbsolutePath() + "/" + filetoCompare);
 
-					final ZipFile fFile = new ZipFile(params.getFirstFolder() + "\\" + filetoCompare);
-					final ZipFile sFile = new ZipFile(params.getSecFolder() + "\\" + filetoCompare);
-
-					System.out.println("**** Starting File Compare Process *****");
-					System.out.println("Files to Compare: \n" + params.getFirstFolder() + "\\" + filetoCompare);
-					System.out.println("AND \n" + params.getSecFolder() + "\\" + filetoCompare);
+					logger.info("**** Starting File Compare Process *****");
+					logger.info("Files to Compare: \n" + f1.getAbsolutePath() + "/" + filetoCompare);
+					logger.info("AND \n" + f2.getAbsolutePath() + "\\" + filetoCompare);
 					result = comparer.compareFiles(fFile, sFile);
 					resultList.add(result);
 					continue;
@@ -83,12 +89,12 @@ public class LCAFileComparer {
 				}				
 			}
 			
-			System.out.println("\n\n=================");
-			System.out.println("Thank you for using the file comparison utility. A summary of your results follows");
-			System.out.println("Number of files compared: " + resultList.size());
+			logger.info("\n\n=================");
+			logger.info("Thank you for using the file comparison utility. A summary of your results follows");
+			logger.info("Number of files compared: " + resultList.size());
 			for (int i = 0; i < resultList.size(); i++) {
 				FileCompareResult resultLine = resultList.get(i);
-				System.out.println(i + " :: File=" + resultLine.getFileName() +
+				logger.info(i + " :: File=" + resultLine.getFileName() +
 						" :: File1Count=" + resultLine.getTotalFileCountFile1() +
 						" :: File2Count=" + resultLine.getTotalFileCountFile2() +
 						" :: Matched=" + resultLine.getMatchCount() +
@@ -99,9 +105,9 @@ public class LCAFileComparer {
 
 			
 		} catch (Exception ex) {
-			System.out.println("A error occured during file comparing : " + ex.getMessage());
+			logger.error("A error occured during file comparing : " + ex.getMessage());
 			ex.printStackTrace();
-			cmd.usage();
+			//cmd.usage();
 		}
 
 	}
@@ -144,7 +150,7 @@ public class LCAFileComparer {
 		int revNotFound = 0;
 		for (Iterator i = set1.iterator(); i.hasNext();) {
 			String name = (String) i.next();
-			filename = "Compare_" + fsFile.getName().replace("\\", "") + ".txt";
+			filename = "Compare_" + fsFile.getName().replace("/", "") + ".txt";
 
 			if (!set2.contains(name)) {
 				filenotfound += 1;
@@ -160,17 +166,17 @@ public class LCAFileComparer {
 					//set2.remove(name);
 					if (!streamsEqual(fsFile.getInputStream(fsFile.getEntry(name)),
 							scFile.getInputStream(scFile.getEntry(name)))) {
-						System.out.println(name + " does not match");
+						logger.error(name + " does not match");
 						ReportFile.fileWriter(filename, name + " does not match");
 						errcount += 1;
 						//continue;
 					} else {
-						System.out.println(name + " file matched");
+						logger.info(name + " file matched");
 						ReportFile.fileWriter(filename, name + " file matched");
 						filecount += 1;
 					}
 				} catch (Exception e) {
-					System.out.println(name + ": File could not be compared. This might be  due to file directory names being different or the file does not exist in both ZIP Files." + e);
+					logger.error(name + ": File could not be compared. This might be  due to file directory names being different or the file does not exist in both ZIP Files." + e);
 					ReportFile.fileWriter(filename, name + ": File could not be compared. This is due to the directory names being different or the file does not exist in both ZIP Files." + e);
 					e.printStackTrace();
 					errcount += 1;
@@ -180,7 +186,7 @@ public class LCAFileComparer {
 		}
 		
 		// Iterate over files in set 2, comparing with set 1
-		System.out.println("zipFile2:");
+		logger.info("zipFile2:");
 		for (Iterator i = set2.iterator(); i.hasNext();) {
 			String name = (String) i.next();
 			System.out.println(name);
@@ -189,7 +195,7 @@ public class LCAFileComparer {
 			// Only worry about the files that were'nt previously matched
 			if (!set1.contains(name)) {
 				if ((Files.isDirectory(fPath)) && !(Files.isRegularFile(fPath))) {
-					System.out.println(name + " not found in " + fsFile.getName());
+					logger.error(name + " not found in " + fsFile.getName());
 					ReportFile.fileWriter(filename, name + " not found in " + fsFile.getName());
 					//filenotfound += 1;
 					revNotFound  += 1;
@@ -197,21 +203,21 @@ public class LCAFileComparer {
 			}
 		}
 		
-		System.out.println(filecount + " entries matched");
+		logger.info(filecount + " entries matched");
 		result.setMatchCount(filecount);
 		ReportFile.fileWriter(filename, filecount + " entries matched");
 		if (errcount > 0) {
-			System.out.println(errcount + " entries did not match");
+			logger.error(errcount + " entries did not match");
 			result.setMismatchCount(errcount);
 			ReportFile.fileWriter(filename, errcount + " entries did not match");
 		}
 		if (filenotfound > 0) {
-			System.out.println(filenotfound + " entries were not found");
+			logger.error(filenotfound + " entries were not found");
 			result.setNotFoundCount(filenotfound);
 			ReportFile.fileWriter(filename, filenotfound + " entries were not found");
 		}
 		if (revNotFound > 0) {
-			System.out.println(revNotFound + " entries found in second file, but not in first");
+			logger.error(revNotFound + " entries found in second file, but not in first");
 			result.setReverseNotFoundCount(revNotFound);
 			ReportFile.fileWriter(filename, revNotFound + " entries found in second file, but not in first");
 		}

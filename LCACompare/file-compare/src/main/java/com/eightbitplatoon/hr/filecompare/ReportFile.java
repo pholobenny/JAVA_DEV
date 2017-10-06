@@ -12,11 +12,10 @@ public class ReportFile {
 		BufferedWriter bw = null;
 		FileWriter fw = null;
 
-		try {
-
-			
-			File file = new File(filename);
-
+		//create one file for results
+		try {			
+			//File file = new File(filename);
+			File file = new File("Results");
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
 				file.createNewFile();
@@ -24,8 +23,8 @@ public class ReportFile {
 
 			// true = append file
 			fw = new FileWriter(file.getAbsoluteFile(), true);
-			bw = new BufferedWriter(fw);
-			bw.write(data +"\n");			
+			bw = new BufferedWriter(fw);				
+			bw.append(data +"\n");			
 
 		} catch (IOException e) {
 
