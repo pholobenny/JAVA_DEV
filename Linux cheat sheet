@@ -42,6 +42,12 @@ user: admin
 pass: admin
 #404e0517137c444e8cb9f8406d506269
 
+Starting jenkins
+* service jenkins status (Check the service is running)
+* service jenkins start (to start service)
+* service jenkins stop (to stop the service)
+
+-------------------------------------------------------------------------------------------------------------------
 
 Wildfly
 -------
