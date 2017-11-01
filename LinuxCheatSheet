@@ -1,0 +1,130 @@
+https://stackoverflow.com/questions/14788345/how-to-install-jdk-on-ubuntu-linux
+https://dennis.gesker.com/2016/02/09/wildfly-10-on-ubuntu-15-10/
+
+Mysql
+-----
+Login to mysql : mysql -u root -p
+password: admin
+
+Reset the MySQL Root Password
+If you forget your MySQL root password, it can be reset.
+Stop the current MySQL server instance: sudo service mysql stop
+Use dpkg to re-run the configuration process that MySQL goes through on first installation. You will again be asked to set a root password.
+  sudo dpkg-reconfigure mysql-server-5.5
+Then start MySQL: sudo service mysql start
+
+
+Other
+-----
+Check services :  sudo service --status-all
+Stop service : sudo service <service name> stop
+Start service : sudo service <service namme> start
+
+
+Jenkins
+-------
+Installation instaractions: 
+wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | sudo apt-key add -
+sudo sh -c 'echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+sudo apt-get update
+sudo apt-get install jenkins
+
+What does this package do?
+    Jenkins will be launched as a daemon up on start. See /etc/init.d/jenkins for more details.
+    The 'jenkins' user is created to run this service.
+    Log file will be placed in /var/log/jenkins/jenkins.log. Check this file if you are troubleshooting Jenkins.
+    /etc/default/jenkins will capture configuration parameters for the launch like e.g JENKINS_HOME
+    By default, Jenkins listen on port 8080. Access this port with your browser to start configuration.
+
+login details
+Browser: localhost:9999
+user: admin
+pass: admin
+#404e0517137c444e8cb9f8406d506269
+
+Starting jenkins
+* service jenkins status (Check the service is running)
+* service jenkins start (to start service)
+* service jenkins stop (to stop the service)
+
+-------------------------------------------------------------------------------------------------------------------
+
+Wildfly
+-------
+UI username: administrator
+Password: password
+
+
+------------------------
+Extracting .tar.gz files
+
+1) If your tar file is compressed using a gzip compressor, use this command to uncompress it.
+
+    $ tar xvzf file.tar.gz
+
+Where,
+
+x: This option tells tar to extract the files.
+
+v: The “v” stands for “verbose.” This option will list all of the files one by one in the archive.
+
+z: The z option is very important and tells the tar command to uncompress the file (gzip).
+
+f: This options tells tar that you are going to give it a file name to work with.
+
+A tarball is a group or archive of files that are bundled together using the tar command and have the .tar file extension.
+
+
+------------------------
+ActiveMQ 
+/apache-activemq-5.15.0/bin$ ./activemq start
+admin console = http://localhost:8161/admin
+username: admin
+password: admin
+
+
+---------------------
+uname -i
+
+---------------------
+Rmoving files from repo but keeping then in local
+git rm --cached system.log
+---------------------
+
+---------------------------------------------------
+Install Notepadqq in Ubuntu 14.04 and Linux Mint 17
+---------------------------------------------------
+	1. sudo add-apt-repository ppa:notepadqq-team/notepadqq
+	2. sudo apt-get update
+	3. sudo apt-get install notepadqq
+
+------------------------
+Use Meld to compare tool
+------------------------
+
+-----------------------
+Changing folder colors
+-----------------------
+sudo add-apt-repository ppa:costales/folder-color
+sudo apt-get update
+sudo apt-get install folder-color
+
+
+
+
+
+
+
+
+
+nautilus -q
+	
+
+
+
+
+
+
+
+
+
