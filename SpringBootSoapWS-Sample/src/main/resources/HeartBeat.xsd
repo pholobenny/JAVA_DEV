@@ -1,0 +1,23 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:tns="http://com/digitalplatoon/services/HeartbeatSvc"
+    targetNamespace="http://com/digitalplatoon/services/HeartBeatSvc"
+    elementFormDefault="qualified">
+
+    <xs:element name="getHeartbeatRequest">
+        <xs:complexType>
+            <xs:all>
+                <xs:element name="requestMessage" type="xs:string" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="getHeartbeatResponse">
+        <xs:complexType>
+            <xs:all>
+            <xs:element name="responseCode" type="xs:int" />
+            <xs:element name="responseBody" type="xs:string" />
+            </xs:all>
+        </xs:complexType>
+    </xs:element>   
+    
+</xs:schema>
